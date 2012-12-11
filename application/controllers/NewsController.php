@@ -1,6 +1,7 @@
 <?php
 class NewsController extends WebAction
 {
+	public $layout = 'main';
 
 	public function actionIndex($id, $params)
 	{
@@ -29,7 +30,7 @@ class NewsController extends WebAction
 	
 	public function actionView($id, $params)
 	{
-		
+		var_dump($this->getView()->render('index'));
 		print_r(func_get_args());
 		echo '文章id' . $id;
 	}
