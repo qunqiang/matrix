@@ -24,15 +24,18 @@ class NewsController extends WebAction
 		// BIOS::initComponent('Rewrite')->toUrl($this->request->getController(), $this->request->getAction(), $this->request->getId(), $this->request->getParamList());
 		
 		
-		$this->getRequest()->redirect($this->getRequest()->getRoute()->toUrl('news','view',1099));
+		$this->redirect($this->getRoute()->toUrl('news','view',1099));
 	}
 	
 	
 	public function actionView($id, $params)
 	{
-		var_dump($this->getView()->render('index'));
-		print_r(func_get_args());
-		echo '文章id' . $id;
+		echo '<pre>';
+		// var_dump($this->getView()->getLayout());
+		$this->assign('test', array(array('title' => 'A test page title'), array('title' => 'A test page title')));
+
+		// print_r($this->getView()->getAssignments());
+		$this->getView()->display();
 	}
 
 }

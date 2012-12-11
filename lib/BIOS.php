@@ -38,7 +38,7 @@ class BIOS
 {
 	static $_basicModules = array(
 		'CSignal' => 'basic/Signal.php',
-		
+
 	);
 	
 	static $storageEngine 	= array();
@@ -60,6 +60,12 @@ class BIOS
 		{
 			$os->powerOn();
 		}
+	}
+
+	public static function notice($message)
+	{
+		echo $message;
+		self::activeOS()->powerOff();
 	}
 	
 	static function raise($signal)
