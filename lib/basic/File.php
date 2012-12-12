@@ -66,7 +66,14 @@ class File
 	
 	public function getLastModifyTime()
 	{
-		return filectime($this->getFileFullPath());
+        if ($this->exists($this->getFileFullPath()))
+        {
+            return filectime($this->getFileFullPath());
+        }
+        else
+        {
+            return 0;
+        }
 	}
 	
 	public function getFileFullPath()
