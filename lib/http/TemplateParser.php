@@ -36,8 +36,10 @@ class TemplateParser
         $templateFile->open($this->getTemplate()->getTemplateFile());
         $content = $templateFile->readContent();
         $templateFile->close();
+		
 
-        $compiledTemplateFile = $this->_convertTags($content);
+		//TODO: do a test that if we need reparse template file
+		$compiledTemplateFile = $this->_convertTags($content);
 		
 		return $this->_renderCompileTempate($compiledTemplateFile, $this->getTemplate()->getAssignments());
     }
@@ -54,8 +56,15 @@ class TemplateParser
 
     private function _convertTags($content)
     {
+		$compiledTemplate = new File();
+		$compiledTemplate->setFilePath($this->getTemplate()->getCompileDir());
+		$compiledTemplate->setFileName(md5($this->getTemplate()->getTemplateFile()));
+		$compiledTemplate->setFileExt('php');
+		
+		
         $tags = array(
-			// '/{Call/'
+			'/{ext:(\D\w+\s+.+)\/}/' => "{ext:$1}",
+			'/{ext:(\D\w+)\s+(.+)}/' => "<?php call_user_func(array('InlineEvent', 'extenalApi'), array('$1', '$2'));?>",
             '/neq/' => '!=',
             '/eq/' => '==',
 			'/{loop\s+data=(\$\D\w+)\s+item=(\D\w+)}/' => '<?php if (is_array($1)) foreach ($1 as $$2):?>',
@@ -73,10 +82,6 @@ class TemplateParser
             $content = preg_replace($tag, $phpv, $content);
         }
 		
-		$compiledTemplate = new File();
-		$compiledTemplate->setFilePath($this->getTemplate()->getCompileDir());
-		$compiledTemplate->setFileName(md5($this->getTemplate()->getTemplateFile()));
-		$compiledTemplate->setFileExt('php');
 		$compiledTemplate->setFileSize(strlen($content));
 		$compiledTemplate->overwrite($content);
 		

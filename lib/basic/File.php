@@ -54,6 +54,12 @@ class File
         return $this->_fileSize;
     }
 	
+	
+	public function getFileLastUpdateTime()
+	{
+		return filemtime($this->getFileFullPath());
+	}
+	
 	public function getFileFullPath()
 	{
 		return $this->getFilePath() . DS . $this->getFileName() . '.' . $this->getFileExt();

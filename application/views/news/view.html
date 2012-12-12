@@ -1,8 +1,11 @@
-<!--Template news-->
+<!--Template-->
 {$test}
-
+{ext:datetime datetime="13910212032" format="Ymd" /}
+{ext:hello message="hello world" who="my name" /}
+<div style="width:400px; height:300px; border:1px solid;">
 <ol>
 {loop data=$test item=key}
 <li>{$key.title}</li>
 {/loop}
 </ol>
+</div>
