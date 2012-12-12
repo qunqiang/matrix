@@ -20,7 +20,7 @@ class File
 
     public function setFilePath($filePath)
     {
-        $this->_filePath = $filePath;
+        $this->_filePath = ROOT . trim($filePath, '/');
     }
     public function getFilePath()
     {
@@ -53,23 +53,61 @@ class File
     {
         return $this->_fileSize;
     }
+	
+	public function getFileFullPath()
+	{
+		return $this->getFilePath() . DS . $this->getFileName() . '.' . $this->getFileExt();
+	}
 
-    public function open($uri = '')
+    public function open($uri = '', $ACCESSMODE = 'r')
     {
-        if (file_exists($uri))
+        $fp = fopen($uri, $ACCESSMODE);
+        if (is_resource($fp))
         {
-            $fp = fopen($uri, 'r');
-            if (is_resource($fp))
-            {
-                $this->setFp($fp);
-                return true;
-            }
-            else
-            {
-                return null;
-            }
+            $this->setFp($fp);
+            return true;
+        }
+        else
+        {
+            return null;
         }
     }
+	
+	public function write($content)
+	{
+		if ($this->getFp())
+		{
+			$len = fwrite($this->getFp(), $content, $this->getFileSize());
+			if ($len !== false)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+	}
+	
+	public function overwrite($content)
+	{
+		$this->open($this->getFileFullPath(), "w+");
+		$this->write($content);
+		$this->close();
+	}
+	
+	public function exists($filePath)
+	{
+		if (file_exists($filePath))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+		
+	}
 
     public function readContent()
     {
@@ -90,10 +128,10 @@ class File
         {
             fclose($this->getFp());
         }
-        else
-        {
-            BIOS::raise('NullPointer');
-        }
+        // else
+        //        {
+        //            BIOS::raise('NullPointer');
+        //        }
     }
 
 

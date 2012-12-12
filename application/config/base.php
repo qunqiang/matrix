@@ -15,6 +15,10 @@ return array(
 	),
 	'runtime'	=> array(
 		'storageEnginesSupport' => array('Session', 'Cookie', 'Database', 'MemCached', 'Redis'),
+		'template'	=> array(
+			'compileDir' 	=> '/temp/templateCompiled',
+			'cacheDir'		=> '/temp/templateCached',
+		)
 	)
 
 );

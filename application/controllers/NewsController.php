@@ -30,7 +30,6 @@ class NewsController extends WebAction
 	
 	public function actionView($id, $params)
 	{
-		echo '<pre>';
 		// var_dump($this->getView()->getLayout());
 		$this->assign('test', array(array('title' => 'A test page title'), array('title' => 'A test page title')));
 

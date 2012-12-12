@@ -39,7 +39,12 @@ class Template
 	}
 	public function getCompileDir()
 	{
-		return $this->_compileDir;
+		$templateConfig = BIOS::activeOS()->getConf('base.runtime.template');
+		if (empty($templateConfig) && empty($this->_compileDir))
+		{
+			BIOS::raise('EmptyPath');
+		}
+		return $this->_compileDir ? $this->_compileDir : $templateConfig['compileDir'];
 	}
 
 	public function setDelimiterLeft($delimiterLeft)
@@ -166,9 +171,9 @@ class Template
 	private function _compile($tpl, $data)
 	{
 
-		$templateCompiled = $this->_getParser()->parse($tpl);
+		$html = $this->_getParser()->parse($tpl);
 
-		return $templateCompiled;
+		return $html;
 	}
 
 	private function _getParser()
