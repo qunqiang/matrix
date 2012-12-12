@@ -9,14 +9,14 @@ class WebToolComponent
 
     public function trimController($controllerClass)
     {
-        $controllerClass = trim($controllerClass, 'Controller');
+        $controllerClass = str_replace('Controller', '', $controllerClass);
         $controllerClass = strtolower($controllerClass);
         return $controllerClass;
     }
 
     public function trimAction($actionName)
     {
-        $actionName = trim($actionName, 'action');
+        $actionName = str_replace('action', '', $actionName);
         $actionName = strtolower($actionName);
         return $actionName;
     }

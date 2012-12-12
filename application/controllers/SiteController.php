@@ -1,8 +1,11 @@
 <?php
 class SiteController extends WebAction
 {
+    public $layout = 'main';
+
 	public function actionIndex()
 	{
-		BIOS::println('Hello World in Action');
+        $this->assign('hello', 'world');
+        $this->display();
 	}
 }

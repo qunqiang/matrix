@@ -14,7 +14,6 @@ class Template
 	
 	private function Template()
 	{
-
 	}
 
 	public function setTpl($tpl)
@@ -24,6 +23,11 @@ class Template
 	public function getTpl()
 	{
 		return $this->_tpl;
+	}
+
+	public function getLayoutPath()
+	{
+		return APP  . 'views' . DS . 'layouts' . DS;
 	}
 
 	public function setTemplateFile($templateFile)
@@ -166,7 +170,7 @@ class Template
 		}
 		$infoName = $args;
 		$template = self::initView();
-		echo call_user_func(array('TemplateInfo', 'get'.ucfirst($infoName)), $template);
+		echo call_user_func(array('File', 'read'.ucfirst($infoName)), $template->getTemplateFile());
 		// return $template->getFile()->getLastModifyTime();
 	}
 
@@ -183,6 +187,7 @@ class Template
 		{
 			$tpl = BIOS::initComponent('WebTool')->trimAction($request->getAction());
 		}
+
 		$this->setTpl($tpl);
 		$templatePath .= $tpl . '.html';
 		$this->setTemplateFile($templatePath);
@@ -192,8 +197,19 @@ class Template
 	private function _compile($tpl, $data)
 	{
 
-		$html = $this->_getParser()->parse($tpl);
-
+		$content = $this->_getParser()->parse($tpl);
+		if ($this->getLayout())
+		{
+			ob_start();
+			$path = $this->getLayoutPath();
+			require($path . $this->getLayout() . '.html');
+			$html = ob_get_clean();
+		}
+		else
+		{
+			$html = $content;
+		}
+		
 		return $html;
 	}
 

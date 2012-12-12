@@ -11,6 +11,10 @@ class File
 
     public static function readLastModifyTime($file)
     {
+        if (!file_exists($file))
+        {
+            return 0;
+        }
         return filectime($file);
     }
 
