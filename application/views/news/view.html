@@ -1,17 +1,8 @@
 <!--Template news-->
 {$test}
-{$test.name}
-<ul>
-{if $test.id neq '1'}
-    <li>{$test.title}</li>
-{/if}
 
-{if ($test.id.name neq '1') and ($list.id eq 1)}
-<a href="{$url}">ClickHereToGo</a>
-{/if}
-</ul>
-
-
+<ol>
 {loop data=$test item=key}
-{$key.title}
+<li>{$key.title}</li>
 {/loop}
+</ol>

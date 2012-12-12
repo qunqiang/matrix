@@ -48,9 +48,9 @@ class WebAction
 		}
 	}
 
-	public function render($tpl)
+	public function display($tpl = '')
 	{
-		$this->getView()->render($tpl);
+		$this->getView()->display($tpl);
 	}
 	
 	public function getLayout()

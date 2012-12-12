@@ -55,6 +55,7 @@ class TemplateParser
     private function _convertTags($content)
     {
         $tags = array(
+			// '/{Call/'
             '/neq/' => '!=',
             '/eq/' => '==',
 			'/{loop\s+data=(\$\D\w+)\s+item=(\D\w+)}/' => '<?php if (is_array($1)) foreach ($1 as $$2):?>',
