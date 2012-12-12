@@ -24,12 +24,16 @@ class NewsController extends WebAction
 		// BIOS::initComponent('Rewrite')->toUrl($this->request->getController(), $this->request->getAction(), $this->request->getId(), $this->request->getParamList());
 		
 		
-		$this->redirect($this->getRoute()->toUrl('news','view',1099));
+		$this->redirect($this->getRoute()->toUrl('site','index',null, array('test' => 1)));
 	}
 	
 	
 	public function actionView($id, $params)
 	{
+		if ($id >1000)
+		{
+			$this->redirect($this->getRoute()->toUrl());
+		}
 		// var_dump($this->getView()->getLayout());
 		$this->assign('test', array(array('title' => 'A test page title'), array('title' => 'An other test page title')));
 

@@ -34,7 +34,7 @@ class Route
 		}
 	}
 	
-	public function toUrl($controller, $action = '', $id = null, $param_list = array(), $format = '')
+	public function toUrl($controller = '', $action = '', $id = null, $param_list = array(), $format = '')
 	{
 		$keyMap = array('controller', 'action', 'id', 'param_list', '.format');
 		$generateFormat = '';
@@ -50,9 +50,9 @@ class Route
 				}
 			}
 		}
-		if (!isset($urlParts['controller']))
+		if (!isset($urlParts['controller']) )
 		{
-			BIOS::raise('NullController');
+			$controller = BIOS::activeOS()->getConf('base.runtime.defaultController');
 		}
 		$maps = array_reverse($this->getMaps());
 		if (is_array($maps))
@@ -166,13 +166,25 @@ class Route
 							$tmpParams = array();
 							if ($listLength <= 1)
 							{
-								BIOS::raise('RouteMapNotMatch');
+								$result = array('c' => 'Site', 'a' => 'index');
 							}
 							for($i = 0; $i < $listLength; $i += 2)
 							{
 								$tmpParams[$tmpList[$i]] = $tmpList[$i + 1];
 							}
 							$tmp[$partname] = $tmpParams;
+						}
+						else if ($partname === 'id')
+						{
+							if (preg_match('/^\d+$/', $result[$k]))
+							{
+								$tmp[$partname] = $result[$k];
+							}
+							else
+							{
+
+								$tmp[$partname] = null;
+							}
 						}
 						else
 						{

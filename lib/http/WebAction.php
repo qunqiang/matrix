@@ -12,14 +12,15 @@ class WebAction
 		$this->setView(Template::initView());
 	}
 	
-	public function get($key)
+	public function get($key = '')
 	{
-		
+
+		return $this->getRequest()->get($key);
 	}
 	
-	public function post($key)
+	public function post($key = '')
 	{
-		
+		return $this->getRequest()->post($key);
 	}
 
 	/**
@@ -55,7 +56,6 @@ class WebAction
 	
 	public function getLayout()
 	{
-		var_dump($this->getView());
 		return $this->getView()->getLayout();
 	}
 	public function setLayout($layout)

@@ -15,6 +15,8 @@ return array(
 		'dateTimeShortFormatString'	=> 'YmdHi',
 	),
 	'runtime'	=> array(
+		'defaultController'		=> 'site',
+		'defaultAction'			=> 'index',
 		'storageEnginesSupport' => array('Session', 'Cookie', 'Database', 'MemCached', 'Redis'),
 		'userDefinedTemplateTags' => 'TemplateTagsComponent',
 		'template'	=> array(

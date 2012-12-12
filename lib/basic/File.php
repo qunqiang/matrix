@@ -150,10 +150,10 @@ class File
         {
             fclose($this->getFp());
         }
-        // else
-        //        {
-        //            BIOS::raise('NullPointer');
-        //        }
+        else
+       {
+           BIOS::raise('NullPointer');
+       }
     }
 
 

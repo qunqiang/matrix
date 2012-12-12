@@ -9,7 +9,7 @@ class HttpEvent extends Event
 	{
 		if(!self::$request)
 		{
-			self::$request = new Request($_GET);
+			self::$request = new Request($_GET, $_POST);
 		}
 		return self::$request;
 	}

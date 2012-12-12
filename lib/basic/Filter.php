@@ -4,7 +4,7 @@ abstract class Filter
 	protected $_beforeFilterData;
 	protected $_afterFilteredData;
 	
-	abstract function doFilter();
+	abstract function doFilter($request);
 	
 	public function initWithDirtyData($dirtyData)
 	{

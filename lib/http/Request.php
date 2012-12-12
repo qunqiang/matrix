@@ -1,8 +1,9 @@
 <?php
 class Request
 {
-	private $_requestData;
-	
+	private $_requestGetData = array();
+	private $_requestPostData = array();
+
 	private $_route;
 	
 	private $_controller;
@@ -11,9 +12,10 @@ class Request
 	private $_param_list;
 	private $_format;
 	
-	public function Request($dirtyData)
+	public function Request($dirtyGetData, $dirtyPostData)
 	{
-		$this->setRequestData(FilterManager::getFilter('UserInputFilter')->initWithDirtyData($dirtyData)->doFilter());
+		$this->setRequestGetData(FilterManager::getFilter('UserInputFilter')->initWithDirtyData($dirtyGetData)->doFilter($this));
+		$this->setRequestPostData(FilterManager::getFilter('UserInputFilter')->initWithDirtyData($dirtyPostData)->doFilter($this));
 		$this->_route = new Route;
 		$this->_route->setRoutineMapPath(APP.'config/route.php');
 		$this->initRequest($this->_route->parseRoute($this->get('q')));
@@ -120,21 +122,54 @@ class Request
 		return $url;
 	}
 	
-	public function get($key)
+	public function getRequestGetData($key = '')
 	{
-		if (isset($this->_requestData[$key]))
+		if (empty($key))
 		{
-			return $this->_requestData[$key];
+			return $this->_requestGetData;
+		}
+		if (isset($this->_requestGetData[$key]))
+		{
+			return $this->_requestGetData[$key];
 		}
 		else
 		{
-			BIOS::raise('HTTP_PARAM_NOT_FOUND');
+			return null;
 		}
 	}
-	
-	public function setRequestData($cleanData)
+
+	public function get($key = '')
 	{
-		$this->_requestData = $cleanData;
+		return $this->getRequestGetData($key);
+	}
+	public function post($key = '')
+	{
+		return $this->getRequestPostData($key);
+	}
+
+	public function getRequestPostData($key = '')
+	{
+		if (empty($key))
+		{
+			return $this->_requestPostData;
+		}
+		if (isset($this->_requestPostData[$key]))
+		{
+			return $this->_requestPostData[$key];
+		}
+		else
+		{
+			return null;
+		}
+	}
+
+	public function setRequestGetData($cleanGetData)
+	{
+		$this->_requestGetData = $cleanGetData;
+	}
+	public function setRequestPostData($cleanPostData)
+	{
+		$this->_requestPostData = $cleanPostData;
 	}
 	
 	public function getDefaultController()

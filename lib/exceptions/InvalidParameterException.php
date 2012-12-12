@@ -6,6 +6,6 @@ class InvalidParameterException extends Signal
 	
 	public function __toString()
 	{
-		return $this->getCode() . ' ' . $this->getMessage() . '<pre>' .$this->getTraceAsString();
+		return $this->getCode() . ' ' . $this->getMessage() ;
 	}
 }
