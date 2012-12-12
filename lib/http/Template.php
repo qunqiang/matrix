@@ -2,7 +2,9 @@
 class Template
 {
 	static $template;
+	private $_file;
 	private $_templateFile;
+	private $_tpl;
 	private $_vars;
 	private $_layout;
 	private $_cacheDir;
@@ -13,6 +15,15 @@ class Template
 	private function Template()
 	{
 
+	}
+
+	public function setTpl($tpl)
+	{
+		$this->_tpl = $tpl;
+	}
+	public function getTpl()
+	{
+		return $this->_tpl;
 	}
 
 	public function setTemplateFile($templateFile)
@@ -88,9 +99,6 @@ class Template
 		return $this->_addVar($key, $value);
 	}
 
-
-
-
 	public function isAlreadyAssigned($key)
 	{
 		$vars = $this->getAssignments();
@@ -149,6 +157,19 @@ class Template
 		return $this->getTemplatePath($request, $tpl);
 	}
 
+	public static function getInfo($args)
+	{
+		$infoName = '';
+		if (empty($args))
+		{
+			BIOS::raise('InvalidParameter');
+		}
+		$infoName = $args;
+		$template = self::initView();
+		echo call_user_func(array('TemplateInfo', 'get'.ucfirst($infoName)), $template);
+		// return $template->getFile()->getLastModifyTime();
+	}
+
 	public function getTemplatePath($request, $tpl = '')
 	{
 		$templatePath = APP.'views' .DS;
@@ -162,7 +183,7 @@ class Template
 		{
 			$tpl = BIOS::initComponent('WebTool')->trimAction($request->getAction());
 		}
-
+		$this->setTpl($tpl);
 		$templatePath .= $tpl . '.html';
 		$this->setTemplateFile($templatePath);
 		return $templatePath;

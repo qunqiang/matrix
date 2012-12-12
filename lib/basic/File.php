@@ -9,6 +9,11 @@ class File
 
     private $_fp;
 
+    public static function readLastModifyTime($file)
+    {
+        return filectime($file);
+    }
+
     public function setFp($fp)
     {
         $this->_fp = $fp;
@@ -55,9 +60,9 @@ class File
     }
 	
 	
-	public function getFileLastUpdateTime()
+	public function getLastModifyTime()
 	{
-		return filemtime($this->getFileFullPath());
+		return filectime($this->getFileFullPath());
 	}
 	
 	public function getFileFullPath()

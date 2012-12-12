@@ -12,6 +12,7 @@ return array(
 		'usingLang'			=> 'zh_cn',
 		'encoding'			=> 'UTF-8',
 		'dateTimeFormatString' => 'Y-m-d H:i:s',
+		'dateTimeShortFormatString'	=> 'YmdHi',
 	),
 	'runtime'	=> array(
 		'storageEnginesSupport' => array('Session', 'Cookie', 'Database', 'MemCached', 'Redis'),
