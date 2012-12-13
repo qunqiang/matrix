@@ -22,10 +22,9 @@
 	'id/action/controller',
 */
 return array(
-	'controller-action-id-param_list.format',
 	'controller',
 	'controller/action',
-	'controller/action/id',
+	'controller/action/id.format',
 	'controller/action/param_list',
 	'controller/action/id/param_list.format',
 );

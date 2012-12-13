@@ -1,10 +1,9 @@
 <!--LastCompiled At:[{assign lastModifyTime/}]-->
-{ext:hello message="hello world" who="my name" /}
-{ext:datetime datetime="13015111153" format="m/d/Y H:i:s"/}
+<a href="{$listurl}">返回列表</a>
 <div style="width:400px; height:300px; border:1px solid;">
-<ol>
-{loop data=$test item=key}
-<li>{$key.title}</li>
-{/loop}
-</ol>
+	{if $news}
+	{$news.content}
+	{else}
+	暂无内容
+	{/if}
 </div>

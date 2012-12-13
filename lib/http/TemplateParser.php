@@ -43,7 +43,6 @@ class TemplateParser
         if (File::readLastModifyTime($this->getTemplate()->getTemplateFile()) 
                 > $compiledTemplateFile->getLastModifyTime())
         {
-            BIOS::println('recompiled template');
             $compiledTemplateFile = $this->_convertTags($content);    
         }
         else
@@ -57,7 +56,10 @@ class TemplateParser
 	
 	private function _renderCompileTempate($compiledTemplateFile,$data)
 	{
-		extract($data);
+		if(!empty($data))
+		{
+			extract($data);
+		}
 		ob_start();
 		require ($compiledTemplateFile);
 		$html = ob_get_clean();
@@ -74,13 +76,14 @@ class TemplateParser
 		
         $tags = array(
             '/{assign\s(\D\w+)\/}/' => '<?php call_user_func(array("Template", "getInfo"), "$1");?>',
-		  '/{ext:(\D\w+\s+.+)\/}/' => "{ext:$1}",
-		  '/{ext:(\D\w+)\s+(.+)}/' => "<?php call_user_func(array('InlineEvent', 'extenalApi'), array('$1', '$2'));?>",
+		  	'/{ext:(\D\w+\s+.+)\/}/' => "{ext:$1}",
+		  	'/{ext:(\D\w+)\s+(.+)}/' => "<?php call_user_func(array('InlineEvent', 'extenalApi'), array('$1', '$2'));?>",
             '/neq/' => '!=',
             '/eq/' => '==',
-		  '/{loop\s+data=(\$\D\w+)\s+item=(\D\w+)}/' => '<?php if (is_array($1)) foreach ($1 as $$2):?>',
-		  '/\/loop/' => ' endforeach;',
+		  	'/{loop\s+data=(\$\D\w+)\s+item=(\D\w+)}/' => '<?php if (is_array($1)) foreach ($1 as $$2):?>',
+		  	'/\/loop/' => ' endforeach;',
             '/{if\s(.+)}/' => '<?php if ($1):?>',
+			'/{else}/' => '<?php else:?>',
             '/\/if/' => 'endif;',
             '/{\$/' => '{echo $',
             '/{/' => '<?php ',
