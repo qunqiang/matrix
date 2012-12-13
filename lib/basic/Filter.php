@@ -1,34 +1,34 @@
 <?php
 abstract class Filter
 {
-	protected $_beforeFilterData;
-	protected $_afterFilteredData;
+	protected $_dirtyData;
+	protected $_cleanData;
 	
-	abstract function doFilter($request);
+	abstract function doFilter(&$request);
 	
 	public function initWithDirtyData($dirtyData)
 	{
-		$this->setBeforeFilterData($dirtyData);
+		$this->setDirtyData($dirtyData);
 		return $this;
 	}
 	
-	public function getBeforeFilterData()
+	public function setDirtyData($dirtyData)
 	{
-		return $this->_beforeFilterData;
+		$this->_dirtyData = $dirtyData;
+	}
+	public function getDirtyData()
+	{
+		return $this->_dirtyData;
 	}
 	
-	public function setBeforeFilterData($dirtyData)
+	public function getCleanData()
 	{
-		return $this->_beforeFilterData = $dirtyData;
+		return $this->_cleanData = $cleanData;
 	}
 
-	public function setAfterFilteredData($cleanData)
+	public function setCleanData($cleanData)
 	{
-		$this->_afterFilteredData = $cleanData;
+		$this->_cleanData = $cleanData;
 	}
-	
-	public function getAfterFilteredData()
-	{
-		return $this->_afterFilteredData;
-	}
+
 }

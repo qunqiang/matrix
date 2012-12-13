@@ -14,7 +14,6 @@ class WebAction
 	
 	public function get($key = '')
 	{
-
 		return $this->getRequest()->get($key);
 	}
 	

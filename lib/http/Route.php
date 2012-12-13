@@ -150,6 +150,7 @@ class Route
 					unset($result[0]);
 					// 上一次解析路径
 					$this->_lastRouteMap = $map;
+					$this->_scanRouteGlue($map);
 					// 解析map 填充参数
 					$map = trim($regx, '/');
 					$map = str_replace(array('\/', '\.', '-'), array('/','/','/'), $map);
@@ -161,12 +162,12 @@ class Route
 						if ($partname === 'param_list')
 						{
 							$tmpList = $result[$k];
-							$tmpList = explode('/', $tmpList);
+							$tmpList = explode($this->getRouteGlue(), $tmpList);
 							$listLength = count($tmpList);
 							$tmpParams = array();
 							if ($listLength <= 1)
 							{
-								$result = array('c' => 'Site', 'a' => 'index');
+								$result = array('c' => '/');
 							}
 							for($i = 0; $i < $listLength; $i += 2)
 							{

@@ -22,7 +22,7 @@
 	'id/action/controller',
 */
 return array(
-	'controller-action.format',
+	'controller-action-id-param_list.format',
 	'controller',
 	'controller/action',
 	'controller/action/id',

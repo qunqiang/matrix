@@ -1,8 +1,7 @@
 <?php
 class Request
 {
-	private $_requestGetData = array();
-	private $_requestPostData = array();
+	private $_requestData = array();
 
 	private $_route;
 	
@@ -12,13 +11,12 @@ class Request
 	private $_param_list;
 	private $_format;
 	
-	public function Request($dirtyGetData, $dirtyPostData)
+	public function Request($dirtyData)
 	{
-		$this->setRequestGetData(FilterManager::getFilter('UserInputFilter')->initWithDirtyData($dirtyGetData)->doFilter($this));
-		$this->setRequestPostData(FilterManager::getFilter('UserInputFilter')->initWithDirtyData($dirtyPostData)->doFilter($this));
 		$this->_route = new Route;
 		$this->_route->setRoutineMapPath(APP.'config/route.php');
-		$this->initRequest($this->_route->parseRoute($this->get('q')));
+		$this->setRequestGetData(FilterManager::getFilter('UserInputFilter')->initWithDirtyData($dirtyData)->doFilter($this));
+		
 	}
 	
 	public function getRoute()
@@ -122,40 +120,25 @@ class Request
 		return $url;
 	}
 	
-	public function getRequestGetData($key = '')
+	public function setData($cleanData)
 	{
-		if (empty($key))
-		{
-			return $this->_requestGetData;
-		}
-		if (isset($this->_requestGetData[$key]))
-		{
-			return $this->_requestGetData[$key];
-		}
-		else
-		{
-			return null;
-		}
+		$this->_requestData = $cleanData;
 	}
 
 	public function get($key = '')
 	{
-		return $this->getRequestGetData($key);
-	}
-	public function post($key = '')
-	{
-		return $this->getRequestPostData($key);
+		return $this->getData($key);
 	}
 
-	public function getRequestPostData($key = '')
+	public function getData($key = '')
 	{
 		if (empty($key))
 		{
-			return $this->_requestPostData;
+			return $this->_requestData;
 		}
-		if (isset($this->_requestPostData[$key]))
+		if (isset($this->_requestData[$key]))
 		{
-			return $this->_requestPostData[$key];
+			return $this->_requestData[$key];
 		}
 		else
 		{

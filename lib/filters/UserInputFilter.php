@@ -2,12 +2,19 @@
 class UserInputFilter extends Filter
 {
 
-	public function doFilter($request)
+	public function doFilter(&$request)
 	{
-		//TODO: 实现用户数据过滤
-         // var_dump($this->getBeforeFilterData());
-		$this->setAfterFilteredData(str_replace(array('`', '\'', '\"'), array('', '', ''), $this->getBeforeFilterData()));
-		return $this->getAfterFilteredData();
+		$dirtyData = $this->getDirtyData();
+		if (isset($dirtyData['q']))
+		{
+			$data = ($request->getRoute()->parseRoute($dirtyData['q']));
+			$request->initRequest($data);
+			$request->setData($request->getParamList());
+		}
+		else
+		{
+			BIOS::raise('InvalidParameter');
+		}
 	}
 
 }
