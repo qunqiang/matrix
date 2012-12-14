@@ -23,8 +23,8 @@
 */
 return array(
 	'controller',
-	'controller/action',
+	'controller/action.format',
 	'controller/action/id.format',
-	'controller/action/param_list',
+	'controller/action/param_list.format',
 	'controller/action/id/param_list.format',
 );

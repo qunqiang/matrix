@@ -14,7 +14,7 @@ class Request
 	public function Request($dirtyData)
 	{
 		$this->_route = new Route;
-		$this->_route->setRoutineMapPath(APP.'config/route.php');
+		$this->_route->setRoutineMapPath(BIOS::activeOS()->getConf('base.runtime.routeMapPath'));
 		$this->setRequestGetData(FilterManager::getFilter('UserInputFilter')->initWithDirtyData($dirtyData)->doFilter($this));
 		
 	}

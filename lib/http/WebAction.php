@@ -12,9 +12,9 @@ class WebAction
 		$this->setView(Template::initView());
 	}
 	
-	public function get($key = '')
+	public function get($key = '', $default = '')
 	{
-		return $this->getRequest()->get($key);
+		return $this->getRequest()->get($key) ? $this->getRequest()->get($key) : $default;
 	}
 	
 	public function post($key = '')

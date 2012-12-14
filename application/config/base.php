@@ -17,6 +17,7 @@ return array(
 	'runtime'	=> array(
 		'defaultController'		=> 'site',
 		'defaultAction'			=> 'index',
+		'routeMapPath'			=> APP.'config/route.php',
 		'storageEnginesSupport' => array('Session', 'Cookie', 'Database', 'MemCached', 'Redis'),
 		'userDefinedTemplateTags' => 'TemplateTagsComponent',
 		'template'	=> array(

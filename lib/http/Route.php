@@ -13,7 +13,7 @@ class Route
 		'param_list'	=> '([\D].+)',
 		'param_name'	=> '(\w+)',
 		'param_value'	=> '(\w+|\d+)',
-		'format'		=> '(html|json|xml|shtml|php|aspx)'
+		'format'		=> '(html|json|xml)'
 	);
 	
 	public function Route()
@@ -91,10 +91,11 @@ class Route
 							$tmpParam .= $tmp;
 						}
 						$args[3] = trim($tmpParam, $this->getRouteGlue());
-						if (isset($args[4]) && !empty($args[4]))
-						{
-							$args[3] .= '.';
-						}
+					}
+					
+					if($format)
+					{
+						$args[4] = '.' . $format;
 					}
 					// print_r($args);
 					$url = $map;
@@ -159,6 +160,7 @@ class Route
 					$tmp = array();
 					foreach ($parts as $k => $partname)
 					{
+						BIOS::println($k . ' ' .$partname);
 						if ($partname === 'param_list')
 						{
 							$tmpList = $result[$k];
@@ -167,7 +169,7 @@ class Route
 							$tmpParams = array();
 							if ($listLength <= 1)
 							{
-								$result = array('c' => '/');
+								$result = array('c' => BIOS::activeOS()->getConf('base.runtime.defaultController'), 'a' =>BIOS::activeOS()->getConf('base.runtime.defaultAction') );
 							}
 							for($i = 0; $i < $listLength; $i += 2)
 							{
@@ -189,17 +191,20 @@ class Route
 						}
 						else
 						{
-							$tmp[$partname] = $result[$k];
+							if (isset($result[$k]))
+							{
+								$tmp[$partname] = $result[$k];
+							}
 						}	
 					}
 					return $tmp;
 				}
 			}
-			$result = array('c' => 'Site', 'a' => 'index');
+			$result = array('c' => BIOS::activeOS()->getConf('base.runtime.defaultController'), 'a' =>BIOS::activeOS()->getConf('base.runtime.defaultAction') );
 		}
 		else
 		{
-			$result = array('c' => 'Site', 'a' => 'index');
+			$result = array('c' => BIOS::activeOS()->getConf('base.runtime.defaultController'), 'a' =>BIOS::activeOS()->getConf('base.runtime.defaultAction') );
 		}
 		return $result;
 	}
