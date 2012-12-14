@@ -40,7 +40,7 @@ class TemplateParser
         $compiledTemplateFile->setFilePath($this->getTemplate()->getCompileDir());
         $compiledTemplateFile->setFileName(md5($this->getTemplate()->getTemplateFile()));
         $compiledTemplateFile->setFileExt('php');
-        if (File::readLastModifyTime($this->getTemplate()->getTemplateFile()) 
+        if (1 or File::readLastModifyTime($this->getTemplate()->getTemplateFile()) 
                 > $compiledTemplateFile->getLastModifyTime())
         {
             $compiledTemplateFile = $this->_convertTags($content);    
@@ -76,6 +76,7 @@ class TemplateParser
 		
         $tags = array(
             '/{assign\s(\D\w+)\/}/' => '<?php call_user_func(array("Template", "getInfo"), "$1");?>',
+			'/{files\s+[\'"](.+)[\'"]\s?\/}/' => '<?php call_user_func(array("Template", "files"), "$1");?>',
 		  	'/{ext:(\D\w+\s+.+)\/}/' => "{ext:$1}",
 		  	'/{ext:(\D\w+)\s+(.+)}/' => "<?php call_user_func(array('InlineEvent', 'extenalApi'), array('$1', '$2'));?>",
             '/neq/' => '!=',
@@ -86,9 +87,9 @@ class TemplateParser
 			'/{else}/' => '<?php else:?>',
             '/\/if/' => 'endif;',
             '/{\$/' => '{echo $',
-            '/{/' => '<?php ',
+			'/\.(\w+)/' => "['$1']",
+			'/{/' => '<?php ',
             '/}/' => '?>',
-            '/\.(\w+)/' => "['$1']",
         );
 
         foreach($tags as $tag => $phpv)

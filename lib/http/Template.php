@@ -198,12 +198,22 @@ class Template
 	{
 
 		$content = $this->_getParser()->parse($tpl);
+		if (!empty($data))
+		{
+			extract($data);
+		}
 		if ($this->getLayout())
 		{
 			ob_start();
 			$path = $this->getLayoutPath();
-			require($path . $this->getLayout() . '.html');
+			$layoutFile = $path . $this->getLayout() . '.html';
+			// $html = $this->_getParser()->parseLayout($layoutFile);
+			// echo $html;
+			require($layoutFile);
 			$html = ob_get_clean();
+			echo '<pre>';
+			echo (htmlspecialchars($html));
+			exit;
 		}
 		else
 		{
