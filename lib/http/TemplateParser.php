@@ -52,6 +52,31 @@ class TemplateParser
         
         return $this->_renderCompileTempate($compiledTemplateFile, $this->getTemplate()->getAssignments());
     }
+
+    public function parseLayout($file, $data)
+    {
+        // BIOS::importClass(BIOS::$_basicModules['File']);
+        $this->getTemplate()->assign('content', $data);
+        $templateFile = new File();
+        $templateFile->open($file);
+        $content = $templateFile->readContent();
+        $templateFile->close();
+        $compiledTemplateFile = new File();
+        $compiledTemplateFile->setFilePath($this->getTemplate()->getCompileDir());
+        $compiledTemplateFile->setFileName(md5($file));
+        $compiledTemplateFile->setFileExt('php');
+        if (1 or File::readLastModifyTime($file) 
+                > $compiledTemplateFile->getLastModifyTime())
+        {
+            $compiledTemplateFile = $this->_convertLayoutTags($content);    
+        }
+        else
+        {
+            $compiledTemplateFile = $compiledTemplateFile->getFileFullPath();    
+        }
+        
+        return $this->_renderCompileTempate($compiledTemplateFile, $this->getTemplate()->getAssignments());
+    }
 	
 	
 	private function _renderCompileTempate($compiledTemplateFile,$data)
@@ -66,6 +91,32 @@ class TemplateParser
 		return $html;
 	}
 
+    private function _convertLayoutTags($content)
+    {
+        $compiledTemplate = new File();
+        $compiledTemplate->setFilePath($this->getTemplate()->getCompileDir());
+        $compiledTemplate->setFileName(md5($this->getTemplate()->getTemplateFile()));
+        $compiledTemplate->setFileExt('php');
+        
+        
+        $tags = array(
+            '/{assign:(\D\w+)\s+(.+)\/}/' => '<?php call_user_func(array("Template", "$1"),"$2");?>',
+            '/{files\s+[\'"](.+)[\'"]\s?\/}/' => '<?php call_user_func(array("Template", "file"), "$1");?>',
+            // '/\.(\w+)/' => "['$1']",
+        );
+
+        foreach($tags as $tag => $phpv)
+        {
+            $content = preg_replace($tag, $phpv, $content);
+        }
+        
+       $compiledTemplate->setFileSize(strlen($content));
+       $compiledTemplate->overwrite($content);
+        
+        return $compiledTemplate->getFileFullPath();
+
+    }
+
     private function _convertTags($content)
     {
 		$compiledTemplate = new File();
@@ -75,7 +126,7 @@ class TemplateParser
 		
 		
         $tags = array(
-            '/{assign\s(\D\w+)\/}/' => '<?php call_user_func(array("Template", "getInfo"), "$1");?>',
+            '/{assign:(\D\w+)\s+(.+)\/}/' => '<?php call_user_func(array("Template", "$1"),"$2");?>',
 			'/{files\s+[\'"](.+)[\'"]\s?\/}/' => '<?php call_user_func(array("Template", "files"), "$1");?>',
 		  	'/{ext:(\D\w+\s+.+)\/}/' => "{ext:$1}",
 		  	'/{ext:(\D\w+)\s+(.+)}/' => "<?php call_user_func(array('InlineEvent', 'extenalApi'), array('$1', '$2'));?>",
@@ -87,7 +138,7 @@ class TemplateParser
 			'/{else}/' => '<?php else:?>',
             '/\/if/' => 'endif;',
             '/{\$/' => '{echo $',
-			'/\.(\w+)/' => "['$1']",
+		    '/(\$.+)\.(\w+)/' => "$1['$2']",
 			'/{/' => '<?php ',
             '/}/' => '?>',
         );

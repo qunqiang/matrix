@@ -16,6 +16,77 @@ class Template
 	{
 	}
 
+	public static function text($node)
+	{
+		try {
+			echo BIOS::activeOS()->getConf('base.app.'.$node);
+		}
+		catch(Exception $e)
+		{
+			echo  $node;
+		}
+	}
+
+	public static function css($files)
+	{
+		$cssPath = BIOS::activeOS()->getConf('base.runtime.staticFilesAP');
+		$cssPath = $cssPath . 'css' .DS;
+		$fileArray = array();
+		if (strpos($files, ',') === false)
+		{
+			$fileArray[] = $files;
+		}
+		else
+		{
+			$fileArray = explode(',', trim($files, ' '));
+		}
+		if (is_array($fileArray))
+		{
+			foreach($fileArray as $file)
+			{
+				$fileinfo = pathinfo($file);
+				if ($fileinfo['extension'] != 'css')
+				{
+					continue;
+				}
+				$cssFile = $cssPath . $file;
+				echo "<link href='{$cssFile}' type='text/css' rel='stylesheet'/>\n";
+			}
+		}
+		echo '';
+	}
+
+	public static function script($files)
+	{
+		$jsPath = BIOS::activeOS()->getConf('base.runtime.staticFilesAP');
+		$jsPath = $jsPath . 'js' .DS;
+		$fileArray = array();
+		if (strpos($files, ',') === false)
+		{
+			$fileArray[] = $files;
+		}
+		else
+		{
+			$fileArray = explode(',', trim($files, ' '));
+		}
+		if (is_array($fileArray))
+		{
+			print_r($fileArray);
+			foreach($fileArray as $file)
+			{
+				$fileinfo = pathinfo($file);
+				if ($fileinfo['extension'] != 'js')
+				{
+					continue;
+				}
+				$jsFile = $jsPath . $file;
+				echo "<script type='text/javascript' src='{$jsFile}'></script>\n";
+			}
+		}
+		echo '';
+	}
+
+
 	public function setTpl($tpl)
 	{
 		$this->_tpl = $tpl;
@@ -119,8 +190,8 @@ class Template
 	public function display($tpl = '')
 	{
 		$html = $this->render($tpl);
-		echo $html;
-
+		echo htmlspecialchars($html);
+		exit;
 	}
 	
 	public function render($tpl)
@@ -204,16 +275,11 @@ class Template
 		}
 		if ($this->getLayout())
 		{
-			ob_start();
 			$path = $this->getLayoutPath();
 			$layoutFile = $path . $this->getLayout() . '.html';
-			// $html = $this->_getParser()->parseLayout($layoutFile);
-			// echo $html;
-			require($layoutFile);
-			$html = ob_get_clean();
-			echo '<pre>';
-			echo (htmlspecialchars($html));
-			exit;
+			$html = $this->_getParser()->parseLayout($layoutFile, $content);
+			// echo '<pre>';
+			// echo (htmlspecialchars($html));
 		}
 		else
 		{

@@ -1,8 +1,8 @@
 <html>
 	<head>
-		<title>{assign:text siteName/}</title>
-		{assign:css 1140.css,ie.css/}
-     {assign:script jquery.min.js,css3-mediaqueries.js/}
+		<title><?php call_user_func(array("Template", "text"),"siteName");?></title>
+		<?php call_user_func(array("Template", "css"),"1140.css,ie.css");?>
+     <?php call_user_func(array("Template", "script"),"jquery.min.js,css3-mediaqueries.js");?>
 	</head>
 	<body>
         <div class="container">
