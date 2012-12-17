@@ -71,7 +71,6 @@ class Template
 		}
 		if (is_array($fileArray))
 		{
-			print_r($fileArray);
 			foreach($fileArray as $file)
 			{
 				$fileinfo = pathinfo($file);
@@ -190,7 +189,7 @@ class Template
 	public function display($tpl = '')
 	{
 		$html = $this->render($tpl);
-		echo htmlspecialchars($html);
+		echo $html;
 		exit;
 	}
 	
@@ -267,7 +266,6 @@ class Template
 	
 	private function _compile($tpl, $data)
 	{
-
 		$content = $this->_getParser()->parse($tpl);
 		if (!empty($data))
 		{
@@ -278,8 +276,6 @@ class Template
 			$path = $this->getLayoutPath();
 			$layoutFile = $path . $this->getLayout() . '.html';
 			$html = $this->_getParser()->parseLayout($layoutFile, $content);
-			// echo '<pre>';
-			// echo (htmlspecialchars($html));
 		}
 		else
 		{

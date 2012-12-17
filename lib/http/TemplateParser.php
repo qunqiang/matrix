@@ -102,7 +102,10 @@ class TemplateParser
         $tags = array(
             '/{assign:(\D\w+)\s+(.+)\/}/' => '<?php call_user_func(array("Template", "$1"),"$2");?>',
             '/{files\s+[\'"](.+)[\'"]\s?\/}/' => '<?php call_user_func(array("Template", "file"), "$1");?>',
-            // '/\.(\w+)/' => "['$1']",
+            '/{\$/' => '{echo $',
+		    '/(\$.+)\.(\w+)/' => "$1['$2']",
+			'/{/' => '<?php ',
+            '/}/' => '?>',
         );
 
         foreach($tags as $tag => $phpv)
@@ -132,22 +135,24 @@ class TemplateParser
 		  	'/{ext:(\D\w+)\s+(.+)}/' => "<?php call_user_func(array('InlineEvent', 'extenalApi'), array('$1', '$2'));?>",
             '/neq/' => '!=',
             '/eq/' => '==',
+			'/gt/' => '>',
+			'/lt/' => '<',
 		  	'/{loop\s+data=(\$\D\w+)\s+item=(\D\w+)}/' => '<?php if (is_array($1)) foreach ($1 as $$2):?>',
 		  	'/\/loop/' => ' endforeach;',
             '/{if\s(.+)}/' => '<?php if ($1):?>',
 			'/{else}/' => '<?php else:?>',
             '/\/if/' => 'endif;',
             '/{\$/' => '{echo $',
-		    '/(\$.+)\.(\w+)/' => "$1['$2']",
+			'/(\$\w+)\.(\w+)/' => "$1['$2']",
 			'/{/' => '<?php ',
             '/}/' => '?>',
         );
 
         foreach($tags as $tag => $phpv)
         {
-            $content = preg_replace($tag, $phpv, $content);
+           $content = preg_replace($tag, $phpv, $content);
         }
-		
+			
 	   $compiledTemplate->setFileSize(strlen($content));
 	   $compiledTemplate->overwrite($content);
 		
