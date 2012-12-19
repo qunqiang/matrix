@@ -2,7 +2,7 @@
 	<head>
 		<title><?php call_user_func(array("Template", "text"),"siteName");?></title>
 		<?php call_user_func(array("Template", "css"),"1140.css,ie.css");?>
-     <?php call_user_func(array("Template", "script"),"jquery.min.js,css3-mediaqueries.js");?>
+     	<?php call_user_func(array("Template", "script"),"jquery.min.js,css3-mediaqueries.js");?>
 	</head>
 	<body>
         <div class="container">

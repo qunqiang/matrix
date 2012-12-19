@@ -4,7 +4,6 @@ return array(
 		'siteName' 			=> '测试站点',
 		'siteAuthor'		=> 'ln<wangqunqiang@gmail.com>',
 		'siteContact'		=> 'Tencent QQ:1039383',
-		'environment'		=> 'development',
 	),
 	
 	'locale'	=> array(
@@ -15,6 +14,7 @@ return array(
 		'dateTimeShortFormatString'	=> 'YmdHi',
 	),
 	'runtime'	=> array(
+		'environment'			=> 'development',
 		'defaultController'		=> 'site',
 		'defaultAction'			=> 'index',
 		'routeMapPath'			=> APP.'config/route.php',

@@ -45,6 +45,11 @@ class MatrixOS
 		return Conf::getInstance()->find($key);
 	}
 	
+	public function initDb()
+	{
+		BIOS::importClass(LIB. 'database' . DS);
+		return Database::getInstance();
+	}
 	
 	
 	public function getRuntimePath()
