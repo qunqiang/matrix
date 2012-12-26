@@ -5,9 +5,15 @@ class DbController extends WebAction
 	{
 		echo '<pre>';
 		$db = BIOS::activeOS()->initDb();
-		
-		$result = $db->find('News', array('id' => 1))->getResultAsArray(DB_TYPE_ASSOC);
-				
+		$result = $db->find('News', array('id' => $id));
 		var_dump($result);
+	}
+	
+	public function actionTestTableName()
+	{
+		$conditions = array('id > 1');
+		$newsMod = NewsTable::model();
+		$newsMod->getPage(1,$conditions);
+		// var_dump($tbl->getTableName());
 	}
 }

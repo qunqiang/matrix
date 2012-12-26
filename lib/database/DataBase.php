@@ -41,6 +41,11 @@ class Database
 		return $this->_prefix;
 	}
 	
+	public function getConnection()
+	{
+		return self::$connection;
+	}
+	
 	public function setRecordSet($executeResult)
 	{
 		$this->_recordSet = $executeResult;
@@ -66,7 +71,6 @@ class Database
 					{
 						BIOS::raise('ClassNotFound');
 					}
-				
 					self::$connection = new PDO(
 						$os->getConf('database.'.$environment.'.dsn'),
 						$os->getConf('database.'.$environment.'.user'),
@@ -77,8 +81,8 @@ class Database
 					{
 						BIOS::raise('DbCreateConnectFailed');
 					}
+					self::$connection->query('SET NAMES ' . $os->getConf('database.'.$environment.'.charset'));
 				}
-				
 				break;
 			default:
 				var_dump($driver);
@@ -89,14 +93,25 @@ class Database
 	public function getResultAsArray($arrayType = DB_ARRAY_ASSOC)
 	{
 		
-		return array();
+		return $this->getRecordSet();
+	}
+	
+	public function findAll($tableIndentify, $conditions= array())
+	{
+		$res = array();
+		$tableClass = $tableIndentify .'Table';
+		$table = new $tableClass;
+		$res = $table->execute($conditions);
+		return $res;
 	}
 	
 	public function find($tableIndentify, $conditions =array())
 	{
-		$tableClass = $tableIndentify .'Table';
-		$table = new $tableClass;
-		$this->setRecordSet($table->execute($conditions));
-		return $this;
+		$res = $this->findAll($tableIndentify, $conditions);
+		if (count($res) >= 1)
+		{
+			return $res[0];
+		}
+		return $res;
 	}
 }

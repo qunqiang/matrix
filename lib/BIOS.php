@@ -50,6 +50,7 @@ class BIOS
 		BIOS::importClass(LIB . 'interfaces');
 		// 做一些类库的加载功能, 根据配置文件载入http 或者 console
 		BIOS::importClass(LIB . $configures['AppType']);
+		BIOS::importClass(LIB . 'database');
 
 		return new BIOS;
 	}
@@ -66,6 +67,16 @@ class BIOS
 	{
 		echo $message;
 		self::activeOS()->powerOff();
+	}
+	
+	static function getCalledClass()
+	{
+		if (function_exists('get_called_class'))
+		{
+			$class = get_called_class();
+		}
+		
+		return $class;
 	}
 	
 	static function raise($signal)

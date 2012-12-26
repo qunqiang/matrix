@@ -3,6 +3,7 @@ define('APP', ROOT . 'application' .DS );
 spl_autoload_register(array('MatrixOS', 'appAutoLoad'));
 class MatrixOS
 {
+	private $_recentlyCalledClass;
 	
 	public function powerOn()
 	{
