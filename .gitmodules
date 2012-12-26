@@ -1,0 +1,3 @@
+[submodule "lib/ido"]
+	path = lib/ido
+	url = https://github.com/qunqiang/ido
