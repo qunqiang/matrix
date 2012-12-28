@@ -7,7 +7,7 @@ class MatrixOS
 	
 	public function powerOn()
 	{
-		date_default_timezone_set($this->getConf('base.locale.dateTimeZone'));
+		date_default_timezone_set($this->getConf('locale.dateTimeZone'));
 		$this->beforeEvent(new InlineEvent('PageAccess', 'log', Event::ACCESSED));
 		$this->executeEvent(new HttpEvent('a', 'b', 1), $this);
 		$this->afterEvent(new InlineEvent('PageLeave', 'log', Event::EXITED));

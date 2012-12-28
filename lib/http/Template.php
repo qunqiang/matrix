@@ -19,7 +19,7 @@ class Template
 	public static function text($node)
 	{
 		try {
-			echo BIOS::activeOS()->getConf('base.app.'.$node);
+			echo BIOS::activeOS()->getConf('application.'.$node);
 		}
 		catch(Exception $e)
 		{
@@ -29,7 +29,7 @@ class Template
 
 	public static function css($files)
 	{
-		$cssPath = BIOS::activeOS()->getConf('base.runtime.staticFilesAP');
+		$cssPath = BIOS::activeOS()->getConf('runtime.staticFilesAP');
 		$cssPath = $cssPath . 'css' .DS;
 		$fileArray = array();
 		if (strpos($files, ',') === false)
@@ -58,7 +58,7 @@ class Template
 
 	public static function script($files)
 	{
-		$jsPath = BIOS::activeOS()->getConf('base.runtime.staticFilesAP');
+		$jsPath = BIOS::activeOS()->getConf('runtime.staticFilesAP');
 		$jsPath = $jsPath . 'js' .DS;
 		$fileArray = array();
 		if (strpos($files, ',') === false)
@@ -124,7 +124,7 @@ class Template
 	}
 	public function getCompileDir()
 	{
-		$templateConfig = BIOS::activeOS()->getConf('base.runtime.template');
+		$templateConfig = BIOS::activeOS()->getConf('runtime.template');
 		if (empty($templateConfig) && empty($this->_compileDir))
 		{
 			BIOS::raise('EmptyPath');

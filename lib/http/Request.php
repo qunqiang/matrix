@@ -14,7 +14,7 @@ class Request
 	public function Request($dirtyData)
 	{
 		$this->_route = new Route;
-		$this->_route->setRoutineMapPath(BIOS::activeOS()->getConf('base.runtime.routeMapPath'));
+		$this->_route->setRoutineMapPath(BIOS::activeOS()->getConf('runtime.routeMapPath'));
 		$this->setRequestGetData(FilterManager::getFilter('UserInputFilter')->initWithDirtyData($dirtyData)->doFilter($this));
 		
 	}
@@ -193,7 +193,7 @@ class Request
 			default: $ctype = "text/html"; break;
 			// default: $ctype="application/force-download"; 
 		}
-		$charset = BIOS::activeOS()->getConf('base.locale.encoding');
+		$charset = BIOS::activeOS()->getConf('locale.encoding');
 		header("Content-type: {$ctype}; charset={$charset}");
 	}
 	

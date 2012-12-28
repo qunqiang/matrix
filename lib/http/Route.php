@@ -200,11 +200,11 @@ class Route
 					return $tmp;
 				}
 			}
-			$result = array('c' => BIOS::activeOS()->getConf('base.runtime.defaultController'), 'a' =>BIOS::activeOS()->getConf('base.runtime.defaultAction') );
+			$result = array('c' => BIOS::activeOS()->getConf('runtime.defaultController'), 'a' =>BIOS::activeOS()->getConf('runtime.defaultAction') );
 		}
 		else
 		{
-			$result = array('c' => BIOS::activeOS()->getConf('base.runtime.defaultController'), 'a' =>BIOS::activeOS()->getConf('base.runtime.defaultAction') );
+			$result = array('c' => BIOS::activeOS()->getConf('runtime.defaultController'), 'a' =>BIOS::activeOS()->getConf('runtime.defaultAction') );
 		}
 		return $result;
 	}

@@ -9,7 +9,7 @@ class DbQueryBuilder
 	{
 
 	}
-	
+
 	public static function model()
 	{
 		if (function_exists('get_called_class'))
@@ -27,7 +27,6 @@ class DbQueryBuilder
 			{
 				$class = $class[1];
 			}
-			
 		}
 		if (!self::$model)
 		{
