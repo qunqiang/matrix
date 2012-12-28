@@ -46,9 +46,13 @@ class MatrixOS
 		return Conf::getInstance()->find($key);
 	}
 	
+	public function getEnv()
+	{
+		return $this->getConf('runtime.environment');
+	}
+	
 	public function initDb()
 	{
-		BIOS::importClass(LIB. 'database' . DS);
 		return Database::getInstance();
 	}
 	
@@ -71,13 +75,16 @@ class MatrixOS
 			'Component'		=> 'components',
 			'Exception'		=> 'exceptions',
 		);
-		
+				
 		$runtimePath = BIOS::activeOS()->getRuntimePath();
 		$searchPath = '';
+		$findFlag = false;
+		// support user classes
 		foreach($flagToPath as $pattern => $path)
 		{
 			if (strpos($fileNeedToLoad, $pattern) !== false)
 			{
+				$findFlag = true;
 				$searchPath = $path;
 				
 				// 加载基础异常库
@@ -87,23 +94,27 @@ class MatrixOS
 				}
 				$fileLoadPath = $runtimePath . $path . DS .$fileNeedToLoad . '.php';
 				// BIOS::println($fileLoadPath);
-				if (class_exists($fileNeedToLoad))
-				{
-					return;
-				}
-				else if (file_exists($fileLoadPath))
+				if (file_exists($fileLoadPath))
 				{
 					require_once ($fileLoadPath);
 					return;
 				}
 			}
-			else
-			{
-				if (class_exists($fileNeedToLoad))
-				{
-					return ;
-				}
-			}
 		}
+		
+		// support for ido adapters
+		if (strpos($fileNeedToLoad, 'Adapter') !== false)
+		{
+			$findFlag = true;
+			BIOS::importClass(LIB. 'ido'. DS . 'adapters');
+			return;
+		}
+		// support for active record
+		if (!$findFlag)
+		{
+			BIOS::importClass(APP . 'tables' . DS . 'ar');
+			return;
+		}
+		return BIOS::raise('ClassNotFound');
 	}
 }

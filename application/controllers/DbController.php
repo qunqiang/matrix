@@ -9,11 +9,18 @@ class DbController extends WebAction
 		var_dump($result);
 	}
 	
+	public function actionTest($id)
+	{
+		echo '<pre>';
+		$news = News::init()->find_by_id($id);
+		echo '<br/>';
+		print_r($news);
+	}
+	
 	public function actionTestTableName()
 	{
 		$conditions = array('id > 1');
 		$newsMod = NewsTable::model();
 		$newsMod->getPage(1,$conditions);
-		// var_dump($tbl->getTableName());
 	}
 }

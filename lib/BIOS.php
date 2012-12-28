@@ -47,10 +47,18 @@ class BIOS
 	static function load($configures = array())
 	{
 		BIOS::importClass(LIB . 'basic');
-		BIOS::importClass(LIB . 'interfaces');
+		$modules_enabled = BIOS::activeOS()->getConf('runtime.modules-enabled');
+		if (is_array($modules_enabled))
+		{
+			foreach($modules_enabled as $module)
+			{
+				BIOS::importClass(LIB . $module);
+			}
+		}
+		
 		// 做一些类库的加载功能, 根据配置文件载入http 或者 console
-		BIOS::importClass(LIB . $configures['AppType']);
-		BIOS::importClass(LIB . 'database');
+		// BIOS::importClass(LIB . $configures['AppType']);
+		// 
 
 		return new BIOS;
 	}
@@ -69,16 +77,6 @@ class BIOS
 		self::activeOS()->powerOff();
 	}
 	
-	static function getCalledClass()
-	{
-		if (function_exists('get_called_class'))
-		{
-			$class = get_called_class();
-		}
-		
-		return $class;
-	}
-	
 	static function raise($signal)
 	{
 		$exception = "{$signal}Exception";
@@ -86,10 +84,12 @@ class BIOS
 		BIOS::importClass(LIB.self::$_basicModules['CSignal']);
 		// BIOS::importClass(SYS_SIGNALS);
 		throw new $exception;
+		exit;
 	}
 	
 	static function importClass($source)
 	{
+		// BIOS::println($source);
 		if (!is_file($source))
 		{
 			if (is_dir($source))
@@ -97,7 +97,7 @@ class BIOS
 				$handle = opendir($source);
 				while ($item = readdir($handle))
 				{
-					if ($item == '.' || $item == '..' || $item == '.svn')
+					if ($item == '.' || $item == '..' || $item == '.svn' || $item == '.git')
 					{
 						continue;
 					}

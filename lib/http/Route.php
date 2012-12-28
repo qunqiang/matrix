@@ -160,7 +160,7 @@ class Route
 					$tmp = array();
 					foreach ($parts as $k => $partname)
 					{
-						BIOS::println($k . ' ' .$partname);
+						// BIOS::println($k . ' ' .$partname);
 						if ($partname === 'param_list')
 						{
 							$tmpList = $result[$k];

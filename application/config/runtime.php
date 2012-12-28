@@ -10,6 +10,18 @@ return array(
 		'template'	=> array(
 			'compileDir' 	=> '/temp/templateCompiled',
 			'cacheDir'		=> '/temp/templateCached',
+		),
+		'modules-available'	=> array(
+			'interfaces',
+			'database',
+		),
+		'modules-enabled'	=> array(
+			'ido',
+			'http',
+			'execeptions',
+			'filters',
+			'storages',
+			'structures',
 		)
 
 );
