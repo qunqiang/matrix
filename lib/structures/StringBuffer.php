@@ -1,5 +1,5 @@
 <?php
-class StringBuffer extends Buffer
+class StringBuffer
 {
 	public function addLine($text)
 	{

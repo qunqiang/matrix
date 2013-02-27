@@ -12,15 +12,11 @@ class DbController extends WebAction
 	public function actionTest($id)
 	{
 		echo '<pre>';
-		$news = News::init()->find_by_id($id);
+		$news = News::init()->find_by_id(array(1,2));
+		$newsCls = NewsClass::init()->find_by_id(1);
+
 		echo '<br/>';
-		print_r($news);
-	}
-	
-	public function actionTestTableName()
-	{
-		$conditions = array('id > 1');
-		$newsMod = NewsTable::model();
-		$newsMod->getPage(1,$conditions);
+		print_r($news);	
+		print_r($newsCls);
 	}
 }

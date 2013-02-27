@@ -31,31 +31,36 @@ class TemplateParser
 
     public function parse()
     {
-        // BIOS::importClass(BIOS::$_basicModules['File']);
         $templateFile = new File();
         $templateFile->open($this->getTemplate()->getTemplateFile());
         $content = $templateFile->readContent();
         $templateFile->close();
+        // var_dump($content);
         $compiledTemplateFile = new File();
         $compiledTemplateFile->setFilePath($this->getTemplate()->getCompileDir());
         $compiledTemplateFile->setFileName(md5($this->getTemplate()->getTemplateFile()));
         $compiledTemplateFile->setFileExt('php');
-        if (1 or File::readLastModifyTime($this->getTemplate()->getTemplateFile()) 
+        // 判断模板文件和缓存文件的更新日期, 决定是否需要更新缓存
+        if (File::readLastModifyTime($this->getTemplate()->getTemplateFile()) 
                 > $compiledTemplateFile->getLastModifyTime())
         {
             $compiledTemplateFile = $this->_convertTags($content);    
+            
         }
         else
         {
-            $compiledTemplateFile = $compiledTemplateFile->getFileFullPath();    
+            $compiledTemplateFile = $compiledTemplateFile->getFileFullPath(); 
+            
         }
-        
-        return $this->_renderCompileTempate($compiledTemplateFile, $this->getTemplate()->getAssignments());
+        // echo 'details';
+        // BIOS::println($compiledTemplateFile);
+        $html = $this->_renderCompileTempate($compiledTemplateFile, $this->getTemplate()->getAssignments());
+        // var_dump($html);
+        return $html;
     }
 
     public function parseLayout($file, $data)
     {
-        // BIOS::importClass(BIOS::$_basicModules['File']);
         $this->getTemplate()->assign('content', $data);
         $templateFile = new File();
         $templateFile->open($file);
@@ -65,17 +70,20 @@ class TemplateParser
         $compiledTemplateFile->setFilePath($this->getTemplate()->getCompileDir());
         $compiledTemplateFile->setFileName(md5($file));
         $compiledTemplateFile->setFileExt('php');
-        if (1 or File::readLastModifyTime($file) 
+        // var_dump('修改时间:'.File::readLastModifyTime($file) . ' ' . $file);
+        // var_dump('修改时间:'.$compiledTemplateFile->getLastModifyTime() . ' ' . $compiledTemplateFile->getFileFullPath());
+
+        if (File::readLastModifyTime($file) 
                 > $compiledTemplateFile->getLastModifyTime())
         {
-            $compiledTemplateFile = $this->_convertLayoutTags($content);    
+            $compiledTemplateFile = $this->_convertLayoutTags($content, $file);    
         }
         else
         {
             $compiledTemplateFile = $compiledTemplateFile->getFileFullPath();    
         }
-        
-        return $this->_renderCompileTempate($compiledTemplateFile, $this->getTemplate()->getAssignments());
+        $html = $this->_renderCompileTempate($compiledTemplateFile, $this->getTemplate()->getAssignments());
+        return $html;
     }
 	
 	
@@ -91,13 +99,15 @@ class TemplateParser
 		return $html;
 	}
 
-    private function _convertLayoutTags($content)
+    private function _convertLayoutTags($content, $file = null)
     {
         $compiledTemplate = new File();
         $compiledTemplate->setFilePath($this->getTemplate()->getCompileDir());
-        $compiledTemplate->setFileName(md5($this->getTemplate()->getTemplateFile()));
+        if ($file)
+            $compiledTemplate->setFileName(md5($file));
+        else
+            $compiledTemplate->setFileName(md5($this->getTemplate()->getTemplateFile()));
         $compiledTemplate->setFileExt('php');
-        
         
         $tags = array(
             '/{assign:(\D\w+)\s+(.+)\/}/' => '<?php call_user_func(array("Template", "$1"),"$2");?>',
